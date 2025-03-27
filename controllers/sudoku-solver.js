@@ -40,13 +40,14 @@ class SudokuSolver {
     let regionStr = '';
     let regionRowStart = Math.floor(row / 3) * 3;
     let regionColStart = Math.floor(column / 3) * 3;
+    let regionIndex = (row - regionRowStart) * 3 + (column - regionColStart);
 
-    for (let i = regionRowStart; i < regionRowStart + 3; i++) {
-      for (let j = regionColStart; j < regionColStart + 3; j++) {
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
         regionStr += puzzleString[(regionRowStart + i) * 9 + (regionColStart + j)];
       }
     }
-    return this.checkValue(regionStr, (row % 3 * 3) + (column % 3), value);
+    return this.checkValue(regionStr, regionIndex, value);
   }
 
   solve(puzzleString) {

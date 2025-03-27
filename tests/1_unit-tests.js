@@ -62,8 +62,14 @@ suite('Unit Tests', () => {
 
   test('Logic handles a valid region (3x3 grid) placement', () => {
     assert.isTrue(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'A', '1', '1'));
-    assert.isTrue(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'B', '2', '3'));
-    assert.isTrue(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'C', '3', '9'));
+    assert.isTrue(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'D', '3', '5'));
+    assert.isTrue(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'G', '6', '8'));
+  });
+
+  test('Logic handles an invalid region (3x3 grid) placement', () => {
+    assert.isFalse(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'A', '1', '9'));
+    assert.isFalse(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'E', '3', '9'));
+    assert.isFalse(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'I', '9', '9'));
   });
 
 });
