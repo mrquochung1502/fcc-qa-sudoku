@@ -48,4 +48,22 @@ suite('Unit Tests', () => {
     assert.isFalse(solver.checkRowPlacement(puzzlesAndSolutions[0][0], 'A', '4', '5'));
   });
 
+  test('Logic handles a valid row placement', () => {
+    assert.isTrue(solver.checkColPlacement(puzzlesAndSolutions[0][0], 'E', '1', '8'));
+    assert.isTrue(solver.checkColPlacement(puzzlesAndSolutions[0][0], 'A', '7', '1'));
+    assert.isTrue(solver.checkColPlacement(puzzlesAndSolutions[0][0], 'F', '9', '5'));
+  });
+
+  test('Logic handles an invalid column placement', () => {
+    assert.isFalse(solver.checkColPlacement(puzzlesAndSolutions[0][0], 'B', '1', '1'));
+    assert.isFalse(solver.checkColPlacement(puzzlesAndSolutions[0][0], 'B', '4', '9'));
+    assert.isFalse(solver.checkColPlacement(puzzlesAndSolutions[0][0], 'B', '5', '5'));
+  });
+
+  test('Logic handles a valid region (3x3 grid) placement', () => {
+    assert.isTrue(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'A', '1', '1'));
+    assert.isTrue(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'B', '2', '3'));
+    assert.isTrue(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'C', '3', '9'));
+  });
+
 });
