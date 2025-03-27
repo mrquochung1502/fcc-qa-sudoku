@@ -8,10 +8,10 @@ let solver = new Solver();
 suite('Unit Tests', () => {
 
   test('Logic handles a valid puzzle string of 81 characters', () => {
-    assert.isTrue(solver.validate(puzzlesAndSolutions[0][0]));
-    assert.isTrue(solver.validate(puzzlesAndSolutions[1][0]));
-    assert.isTrue(solver.validate(puzzlesAndSolutions[2][0]));
-    assert.isTrue(solver.validate(puzzlesAndSolutions[3][0]));
+    assert.deepEqual(solver.validate(puzzlesAndSolutions[0][0]), 0);
+    assert.deepEqual(solver.validate(puzzlesAndSolutions[1][0]), 0);
+    assert.deepEqual(solver.validate(puzzlesAndSolutions[2][0]), 0);
+    assert.deepEqual(solver.validate(puzzlesAndSolutions[3][0]), 0);
   });
 
   test('Logic handles a puzzle string with invalid characters (not 1-9 or .)', () => {

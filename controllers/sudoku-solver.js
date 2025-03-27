@@ -3,8 +3,31 @@ class SudokuSolver {
     if (!puzzleString) return 1;
     if (puzzleString.length !== 81) return 3;
     if (/[^1-9.]/.test(puzzleString)) return 4;
+  
+    for (let i = 0; i < 9; i++) {
+      if (!this.checkPuzzleString(this.getRow(puzzleString, i)) ||
+          !this.checkPuzzleString(this.getCol(puzzleString, i)) ||
+          !this.checkPuzzleString(this.getRegion(puzzleString, Math.floor(i / 3) * 3, (i % 3) * 3)[0])) {
+        return 7;
+      }
+    }
+    return 0;
+  }
 
-    return true;
+  checkPuzzleString(str) {
+    let numSet = new Set();
+    let sum = 0;
+  
+    for (let char of str) {
+      if (char !== '.') {
+        let num = parseInt(char);
+        if (numSet.has(num)) return false; 
+        numSet.add(num);
+        sum += num;
+      }
+    }
+  
+    return str.includes('.') || sum === 45; 
   }
 
   convertInput(row, column) {
@@ -71,10 +94,6 @@ class SudokuSolver {
     let regionIndex = (row - regionRowStart) * 3 + (column - regionColStart);
 
     return this.checkStr(regionStr, regionIndex, value);
-  }
-
-  checkPuzzle(puzzleString) {
-    if (this.validate(puzzleString)) return false;
   }
 
   solve(puzzleString) {
