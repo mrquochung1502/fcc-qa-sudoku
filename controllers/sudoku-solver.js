@@ -1,19 +1,22 @@
 class SudokuSolver {
   validate(puzzleString) {
-    if (!puzzleString) return 'Required field missing';
-    if (puzzleString.length !== 81) return 'Expected puzzle to be 81 characters long';
-    if (/[^1-9.]/.test(puzzleString)) return 'Invalid characters in puzzle';
-    return null;
+    if (!puzzleString) return 1;
+    if (puzzleString.length !== 81) return 3;
+    if (/[^1-9.]/.test(puzzleString)) return 4;
+
+    return true;
   }
 
   convertInput(row, column) {
     row = row.toUpperCase().charCodeAt(0) - "A".charCodeAt(0);
     column = parseInt(column) - 1;
-    return { row, column };
+
+    return [row, column];
   }
 
   checkStr(str, index, value) {
     if (str[index] === '.') return !str.includes(value);
+
     return str[index] === value;
   }
 
@@ -41,30 +44,37 @@ class SudokuSolver {
         regionStr += puzzleString[(regionRowStart + i) * 9 + (regionColStart + j)];
       }
     }
+
     return [regionStr, regionRowStart, regionColStart];
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
-    ({ row, column } = this.convertInput(row, column));
+    [row, column] = this.convertInput(row, column);
 
     let rowStr = this.getRow(puzzleString, row);
+
     return this.checkStr(rowStr, column, value);
   }
 
   checkColPlacement(puzzleString, row, column, value) {
-    ({ row, column } = this.convertInput(row, column));
+    [row, column] = this.convertInput(row, column);
 
     let colStr = this.getCol(puzzleString, column);
+
     return this.checkStr(colStr, row, value)
   }
 
   checkRegionPlacement(puzzleString, row, column, value) {
-    ({ row, column } = this.convertInput(row, column));
+    [row, column] = this.convertInput(row, column);
 
     let [regionStr, regionRowStart, regionColStart] = this.getRegion(puzzleString, row, column);
     let regionIndex = (row - regionRowStart) * 3 + (column - regionColStart);
 
     return this.checkStr(regionStr, regionIndex, value);
+  }
+
+  checkPuzzle(puzzleString) {
+    if (this.validate(puzzleString)) return false;
   }
 
   solve(puzzleString) {
