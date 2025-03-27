@@ -21,10 +21,10 @@ suite('Unit Tests', () => {
 
   test('Logic handles a puzzle string that is not 81 characters in length', () => {
     const shortPuzzle = '1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37';
-    assert.equal(solver.validate(shortPuzzle), 'Expected puzzle to be 81 characters long', 'Puzzle shorter than 81 characters should return error');
+    assert.equal(solver.validate(shortPuzzle), 'Expected puzzle to be 81 characters long');
 
     const longPuzzle = '1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37...';
-    assert.equal(solver.validate(longPuzzle), 'Expected puzzle to be 81 characters long', 'Puzzle longer than 81 characters should return error');
+    assert.equal(solver.validate(longPuzzle), 'Expected puzzle to be 81 characters long');
   });
 
   test('Input conversions work', () => {

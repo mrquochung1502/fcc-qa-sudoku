@@ -6,48 +6,65 @@ class SudokuSolver {
     return null;
   }
 
-  convertInput(row, column, value) {
+  convertInput(row, column) {
     row = row.toUpperCase().charCodeAt(0) - "A".charCodeAt(0);
     column = parseInt(column) - 1;
     return { row, column };
   }
 
-  checkValue(str, index, value) {
+  checkStr(str, index, value) {
     if (str[index] === '.') return !str.includes(value);
     return str[index] === value;
   }
 
-  checkRowPlacement(puzzleString, row, column, value) {
-    ({ row, column } = this.convertInput(row, column));
-    
-    let rowStr = puzzleString.slice(row * 9, (row + 1) * 9);
-    return this.checkValue(rowStr, column, value);
+  getRow(puzzleString, row) {
+    return puzzleString.slice(row * 9, (row + 1) * 9);
   }
 
-  checkColPlacement(puzzleString, row, column, value) {
-    ({ row, column } = this.convertInput(row, column));
-
+  getCol(puzzleString, column) {
     let colStr = '';
+
     for (let i = 0; i < 9; i ++) {
       colStr += puzzleString[column + i * 9];
     }
-    return this.checkValue(colStr, row, value)
+
+    return colStr;
   }
 
-  checkRegionPlacement(puzzleString, row, column, value) {
-    ({ row, column } = this.convertInput(row, column));
-
+  getRegion(puzzleString, row, column) {
     let regionStr = '';
     let regionRowStart = Math.floor(row / 3) * 3;
     let regionColStart = Math.floor(column / 3) * 3;
-    let regionIndex = (row - regionRowStart) * 3 + (column - regionColStart);
 
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         regionStr += puzzleString[(regionRowStart + i) * 9 + (regionColStart + j)];
       }
     }
-    return this.checkValue(regionStr, regionIndex, value);
+    return [regionStr, regionRowStart, regionColStart];
+  }
+
+  checkRowPlacement(puzzleString, row, column, value) {
+    ({ row, column } = this.convertInput(row, column));
+
+    let rowStr = this.getRow(puzzleString, row);
+    return this.checkStr(rowStr, column, value);
+  }
+
+  checkColPlacement(puzzleString, row, column, value) {
+    ({ row, column } = this.convertInput(row, column));
+
+    let colStr = this.getCol(puzzleString, column);
+    return this.checkStr(colStr, row, value)
+  }
+
+  checkRegionPlacement(puzzleString, row, column, value) {
+    ({ row, column } = this.convertInput(row, column));
+
+    let [regionStr, regionRowStart, regionColStart] = this.getRegion(puzzleString, row, column);
+    let regionIndex = (row - regionRowStart) * 3 + (column - regionColStart);
+
+    return this.checkStr(regionStr, regionIndex, value);
   }
 
   solve(puzzleString) {
