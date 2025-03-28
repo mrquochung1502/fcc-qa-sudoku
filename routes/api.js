@@ -21,8 +21,12 @@ module.exports = function (app) {
 
     });
     
-  app.route('/api/solve')
+    app.route('/api/solve')
     .post((req, res) => {
-
+      const puzzleString = req.body.puzzle;
+      const result = solver.solve(puzzleString);
+      
+      if (typeof result === 'number') return res.json({ error: errorMsg[result] });
+      return res.json({ solution: result });
     });
 };
