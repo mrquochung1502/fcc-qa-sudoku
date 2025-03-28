@@ -38,9 +38,7 @@ class SudokuSolver {
   }
 
   checkStr(str, index, value) {
-    if (str[index] === '.') return !str.includes(value);
-
-    return str[index] === value;
+    return str.includes(value) ? str[index] === value : true;
   }
 
   getRow(puzzleString, row) {
