@@ -22,22 +22,28 @@ module.exports = function (app) {
   }
 
   app.route('/api/check')
-    .post((req, res) => {
-      const { puzzle, coordinate, value } = req.body;
-      if (!puzzle || !coordinate || !value ) return res.json({ error: errorMsg[2] });
-      if (solver.validate(puzzle)) return res.json({ error: errorMsg[solver.validate(puzzle)] });
-      if (!parseCoord(coordinate)) return res.json({ error: errorMsg[5] });
-      if (!/^[1-9]$/.test(value)) return res.json({ error: errorMsg[6] });
+  .post((req, res) => {
+    const { puzzle, coordinate, value } = req.body;
+    if (!puzzle || !coordinate || !value) return res.json({ error: errorMsg[2] });
+    if (solver.validate(puzzle)) return res.json({ error: errorMsg[solver.validate(puzzle)] });
+    if (!parseCoord(coordinate)) return res.json({ error: errorMsg[5] });
+    if (!/^[1-9]$/.test(value)) return res.json({ error: errorMsg[6] });
 
-      const [row, column] = parseCoord(coordinate);
-      let conflict = [];
-      if (!solver.checkRowPlacement(puzzle, row, column, value)) conflict.push('row');
-      if (!solver.checkColPlacement(puzzle, row, column, value)) conflict.push('column');
-      if (!solver.checkRegionPlacement(puzzle, row, column, value)) conflict.push('region');
+    const [row, column] = parseCoord(coordinate);
+    const index = (row.charCodeAt(0) - "A".charCodeAt(0)) * 9 + (column - 1);
 
-      if (conflict.length === 0) return res.json({ valid: "true" });
-      return res.json({ valid: "false", conflict: conflict });
-    });
+    if (puzzle[index] === value) {
+      return res.json({ valid: true });
+    }
+
+    let conflict = [];
+    if (!solver.checkRowPlacement(puzzle, row, column, value)) conflict.push('row');
+    if (!solver.checkColPlacement(puzzle, row, column, value)) conflict.push('column');
+    if (!solver.checkRegionPlacement(puzzle, row, column, value)) conflict.push('region');
+
+    if (conflict.length === 0) return res.json({ valid: true });
+    return res.json({ valid: false, conflict });
+  });
     
     app.route('/api/solve')
     .post((req, res) => {

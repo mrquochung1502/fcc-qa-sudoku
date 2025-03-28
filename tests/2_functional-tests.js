@@ -84,7 +84,7 @@ suite('Functional Tests', () => {
         assert.equal(res.status, 200);
         assert.isObject(res.body);
         assert.property(res.body, 'valid');
-        assert.equal(res.body.valid, 'true');
+        assert.equal(res.body.valid, true);
         done();
       });
   });
@@ -101,7 +101,7 @@ suite('Functional Tests', () => {
         assert.equal(res.status, 200);
         assert.isObject(res.body);
         assert.property(res.body, 'valid');
-        assert.equal(res.body.valid, 'false');
+        assert.equal(res.body.valid, false);
         assert.property(res.body, 'conflict');
         assert.deepEqual(res.body.conflict, ['row', 'column', 'region']);
         done();
@@ -120,7 +120,7 @@ suite('Functional Tests', () => {
         assert.equal(res.status, 200);
         assert.isObject(res.body);
         assert.property(res.body, 'valid');
-        assert.equal(res.body.valid, 'false');
+        assert.equal(res.body.valid, false);
         assert.property(res.body, 'conflict');
         assert.deepEqual(res.body.conflict, ['column']);
         done();
@@ -139,7 +139,7 @@ suite('Functional Tests', () => {
         assert.equal(res.status, 200);
         assert.isObject(res.body);
         assert.property(res.body, 'valid');
-        assert.equal(res.body.valid, 'false');
+        assert.equal(res.body.valid, false);
         assert.property(res.body, 'conflict');
         assert.deepEqual(res.body.conflict, ['row','region']);
         done();
