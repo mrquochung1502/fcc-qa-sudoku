@@ -96,8 +96,72 @@ class SudokuSolver {
     return this.checkStr(regionStr, regionIndex, value);
   }
 
+  getRemainingNumbers(puzzleString) {
+    let remaining = Array(10).fill(9);
+    for (let char of puzzleString) {
+      if (char !== '.') remaining[parseInt(char)]--;
+    }
+    return remaining;
+  }
+
+  getActions(puzzleString) {
+    let possibilities = {};
+    let remainingNumbers = this.getRemainingNumbers(puzzleString);
+
+    for (let i = 0; i < 81; i++) {
+      if (puzzleString[i] === '.') {
+        let row = Math.floor(i / 9);
+        let col = i % 9;
+        let rowStr = this.getRow(puzzleString, row);
+        let colStr = this.getCol(puzzleString, col);
+        let regionStr = this.getRegion(puzzleString, row, col)[0];
+
+        let possibleValues = [];
+        for (let num = 1; num <= 9; num++) {
+          if (!rowStr.includes(num) && !colStr.includes(num) && !regionStr.includes(num)) {
+            possibleValues.push({ num, remaining: remainingNumbers[num] });
+          }
+        }
+
+        possibleValues.sort((a, b) => a.remaining - b.remaining); 
+        possibilities[i] = possibleValues.map(x => x.num);
+      }
+    }
+
+    return possibilities;
+  }
+
   solve(puzzleString) {
-    
+    if (this.validate(puzzleString)) return this.validate(puzzleString);
+    if (!puzzleString.includes('.')) return puzzleString;
+
+    let possibilities = this.getActions(puzzleString);
+    let frontier = Object.entries(possibilities)
+      .map(([index, values]) => ({ index: parseInt(index), values }))
+      .sort((a, b) => a.values.length - b.values.length);
+
+    return this.backtrack(puzzleString, frontier);
+  }
+
+  backtrack(puzzleString, frontier) {
+    if (!frontier.length) {
+      return puzzleString.includes('.') ? 7 : puzzleString; 
+    }
+  
+    let { index, values } = frontier.shift();
+  
+    for (let value of values) {
+      let state = puzzleString.substring(0, index) + value + puzzleString.substring(index + 1);
+      let actions = this.getActions(state);
+      let newFrontier = Object.entries(actions)
+        .map(([i, v]) => ({ index: parseInt(i), values: v }))
+        .sort((a, b) => a.values.length - b.values.length);
+  
+      let result = this.backtrack(state, newFrontier);
+      if (result !== 7) return result; 
+    }
+  
+    return 7; 
   }
 }
 

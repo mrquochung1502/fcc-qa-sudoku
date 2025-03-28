@@ -61,4 +61,26 @@ suite('Unit Tests', () => {
     assert.isFalse(solver.checkRegionPlacement(puzzlesAndSolutions[0][0], 'I', '9', '9'));
   });
 
+  test('Valid puzzle strings pass the solver', () => {
+    assert.typeOf(solver.solve(puzzlesAndSolutions[0][0]), 'string');
+    assert.typeOf(solver.solve(puzzlesAndSolutions[1][0]), 'string');
+    assert.typeOf(solver.solve(puzzlesAndSolutions[2][0]), 'string');
+    assert.typeOf(solver.solve(puzzlesAndSolutions[3][0]), 'string');
+  });
+
+  test('Invalid puzzle strings fail the solver', () => {
+    assert.deepEqual(solver.solve('115..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.'), 7);    
+    assert.deepEqual(solver.solve('1.5..2.841.63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.'), 7);    
+    assert.deepEqual(solver.solve('1.5..2.841.63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..11.16....926914.37.'), 7);    
+    assert.deepEqual(solver.solve('135562984946381257728359613694517832812936745657824196473298561581673421269145378'), 7);    
+    assert.deepEqual(solver.solve('634617429469746129837467983467893461278346238974638746312978463147861492734637826'), 7);    
+  });
+
+  test('Solver returns the expected solution for an incomplete puzzle', () => {
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[0][0]), puzzlesAndSolutions[0][1]);
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[1][0]), puzzlesAndSolutions[1][1]);
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[2][0]), puzzlesAndSolutions[2][1]);
+    assert.deepEqual(solver.solve(puzzlesAndSolutions[3][0]), puzzlesAndSolutions[3][1]);
+  });
+
 });
